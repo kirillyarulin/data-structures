@@ -1,5 +1,8 @@
 package seminar1;
 
+import seminar1.collections.IStack;
+import seminar1.collections.LinkedStack;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,22 +10,34 @@ import java.io.InputStreamReader;
 /**
  * 1. пустая строка — правильная скобочная последовательность;
  * 2. правильная скобочная последовательность,
- *      взятая в скобки одного типа — правильная скобочная последовательность;
+ * взятая в скобки одного типа — правильная скобочная последовательность;
  * 3. правильная скобочная последовательность,
- *      к которой приписана слева или справа правильная скобочная последовательность
- *      — тоже правильная скобочная последовательность.
+ * к которой приписана слева или справа правильная скобочная последовательность
+ * — тоже правильная скобочная последовательность.
  */
 public class ParenthesesSequence {
 
     private static final String QUIT = "q";
 
-    private static final char LEFT_PAREN     = '(';
-    private static final char RIGHT_PAREN    = ')';
+    private static final char LEFT_PAREN = '(';
+    private static final char RIGHT_PAREN = ')';
 
     // sequence = "()()" | "((((" | ")()(" | ...
     private static boolean isBalanced(String sequence) {
-        /* TODO: implement it */
-        return false;
+        if (sequence.length() == 0) return true;
+        IStack<Character> stack = new LinkedStack<>();
+        for (char x : sequence.toCharArray()) {
+            if (x == LEFT_PAREN) {
+                stack.push(x);
+            } else if (x == RIGHT_PAREN) {
+                if (stack.isEmpty()) {
+                    return false;
+                } else {
+                    if (!stack.pop().equals(LEFT_PAREN)) return false;
+                }
+            }
+        }
+        return stack.isEmpty();
     }
 
     public static void main(String[] args) {

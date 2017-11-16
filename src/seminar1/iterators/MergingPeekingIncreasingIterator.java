@@ -1,7 +1,10 @@
 package seminar1.iterators;
 
+import seminar1.collections.ArrayPriorityQueue;
+
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Итератор возвращающий последовательность из N возрастающих итераторов в порядке возрастания
@@ -17,22 +20,26 @@ public class MergingPeekingIncreasingIterator implements Iterator<Integer> {
 
     private Comparator<PeekingIncreasingIterator> comparator = (p1, p2) -> p1.peek().compareTo(p2.peek());
 
+    private ArrayPriorityQueue<Integer> priorityQueue = new ArrayPriorityQueue<Integer>();
+
+
     public MergingPeekingIncreasingIterator(IPeekingIterator... peekingIterator) {
-        /* TODO: implement it */
-//        for (int i = 0; i < peekingIterator.length; i++) {
-//            peekingIterator[i].hasNext();
-//        }
+        for (int i = 0; i < peekingIterator.length; i++) {
+            while (peekingIterator[i].hasNext()) priorityQueue.add((Integer) peekingIterator[i].next());
+        }
     }
 
     @Override
     public boolean hasNext() {
-        /* TODO: implement it */
-        return false;
+        return !priorityQueue.isEmpty();
     }
 
     @Override
     public Integer next() {
-        /* TODO: implement it */
-        return null;
+        if (hasNext()){
+            return priorityQueue.extractMin();
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 }

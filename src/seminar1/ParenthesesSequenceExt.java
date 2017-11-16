@@ -1,5 +1,8 @@
 package seminar1;
 
+import seminar1.collections.IStack;
+import seminar1.collections.LinkedStack;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,8 +28,38 @@ public class ParenthesesSequenceExt {
 
     // sequence = "()()" | "(({}[]))[[[" | "{}" | ...
     private static boolean isBalanced(String sequence) {
-        /* TODO: implement it */
-        return false;
+        if (sequence.length()==0) return true;
+        IStack<Character> stack = new LinkedStack<>();
+        for (char x: sequence.toCharArray()) {
+            if (x==LEFT_PAREN || x==LEFT_BRACKET || x==LEFT_BRACE) {
+                stack.push(x);
+            } else {
+                switch (x) {
+                    case RIGHT_PAREN:
+                        if (stack.isEmpty()) {
+                            return false;
+                        } else {
+                           if (!stack.pop().equals(LEFT_PAREN)) return false;
+                        }
+                        break;
+                    case RIGHT_BRACKET:
+                        if (stack.isEmpty()) {
+                            return false;
+                        } else {
+                            if (!stack.pop().equals(LEFT_BRACKET)) return false;
+                        }
+                        break;
+                    case RIGHT_BRACE:
+                        if (stack.isEmpty()) {
+                            return false;
+                        } else {
+                            if (!stack.pop().equals(LEFT_BRACE)) return false;
+                        }
+                        break;
+                }
+            }
+        }
+        return stack.isEmpty();
     }
 
     public static void main(String[] args) {

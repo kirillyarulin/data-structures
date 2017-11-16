@@ -1,6 +1,7 @@
 package seminar1.collections;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedQueue<Item> implements IQueue<Item> {
 
@@ -11,13 +12,31 @@ public class LinkedQueue<Item> implements IQueue<Item> {
 
     @Override
     public void enqueue(Item item) {
-        /* TODO: implement it */
+        if (tail==null) {
+            tail = head = new Node<>(item);
+        } else {
+            Node<Item> node = new Node<>(item);
+            tail.next =node;
+            tail=node;
+        }
+        size++;
     }
 
     @Override
     public Item dequeue() {
-        /* TODO: implement it */
-        return null;
+        if (head==null) return null;
+        if (head==tail) {
+            Item item = head.item;
+            head=tail=null;
+            size--;
+            return item;
+        } else {
+            Item item = head.item;
+            head=head.next;
+            size--;
+            return item;
+        }
+
     }
 
     @Override
@@ -36,17 +55,21 @@ public class LinkedQueue<Item> implements IQueue<Item> {
     }
 
     private class LinkedQueueIterator implements Iterator<Item> {
+        Node<Item> currentPosition = new Node<Item>(null,head);
 
         @Override
         public boolean hasNext() {
-            /* TODO: implement it */
-            return false;
+           return currentPosition.next!=null;
         }
 
         @Override
         public Item next() {
-            /* TODO: implement it */
-            return null;
+            if (hasNext()) {
+                currentPosition = currentPosition.next;
+                return currentPosition.item;
+            } else {
+                throw new NoSuchElementException();
+            }
         }
 
     }

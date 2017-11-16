@@ -1,6 +1,7 @@
 package seminar1.iterators;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Итератор возвращающий последовательность из двух возрастающих итераторов в порядке возрастания
@@ -15,6 +16,8 @@ public class MergingIncreasingIterator implements Iterator<Integer> {
 
     private IncreasingIterator first;
     private IncreasingIterator second;
+    private Integer firstNum;
+    private Integer secondNum;
 
     public MergingIncreasingIterator(IncreasingIterator first, IncreasingIterator second) {
         this.first = first;
@@ -24,13 +27,31 @@ public class MergingIncreasingIterator implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
-        /* TODO: implement it */
-        return false;
+        //todo imp
+        return first.hasNext() || second.hasNext();
     }
 
     @Override
     public Integer next() {
-        /* TODO: implement it */
-        return null;
+        if (hasNext()) {
+            if (firstNum == null && first.hasNext()) firstNum = first.next();
+            if (secondNum == null && second.hasNext()) secondNum = second.next();
+
+            if (firstNum == null) return second.next();
+            if (secondNum == null) return first.next();
+
+            int minNum;
+
+            if (firstNum < secondNum) {
+                minNum = firstNum;
+                firstNum = null;
+            } else {
+                minNum = secondNum;
+                secondNum = null;
+            }
+            return minNum;
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 }

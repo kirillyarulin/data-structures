@@ -31,8 +31,11 @@ public class SolverExt {
     private static final char DIVISION     = '/';
 
     private static double evaluate(String[] values) {
-        /* TODO: implement it */
-        return 0D;
+        for (int i = 0; i < values.length; i++) {
+
+
+        }
+        return 0;
     }
 
     public static void main(String[] args) {

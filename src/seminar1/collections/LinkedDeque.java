@@ -1,46 +1,118 @@
 package seminar1.collections;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class LinkedDeque<Item> implements IDeque<Item> {
+    private Node<Item> head;
+    private Node<Item> tail;
+    private int size;
 
     @Override
     public void pushFront(Item item) {
-        /* TODO: implement it */
+        if (head==null) {
+            head=tail=new Node<>(item);
+        } else {
+            Node<Item> newHead = new Node<Item>(item,head,null);
+            head.prev=newHead;
+            head=newHead;
+        }
+        size++;
     }
 
     @Override
     public void pushBack(Item item) {
-        /* TODO: implement it */
+        if (tail==null) {
+            tail=head=new Node<>(item);
+        } else {
+            Node<Item> newTail = new Node<Item>(item,null,tail);
+            tail.next=newTail;
+            tail = newTail;
+        }
+        size++;
     }
 
     @Override
     public Item popFront() {
-        /* TODO: implement it */
-        return null;
+        if (head==null) {
+            return null;
+        } else {
+            Item item = head.item;
+            if (head.next==null) {
+                head = null;
+            } else {
+                head = head.next;
+                head.prev = null;
+            }
+            size--;
+            return item;
+        }
+
     }
 
     @Override
     public Item popBack() {
-        /* TODO: implement it */
-        return null;
+        if (tail==null) {
+            return null;
+        } else {
+            Item item = tail.item;
+            if (tail.prev==null) {
+                tail = null;
+            } else {
+                tail = tail.prev;
+                tail.next = null;
+            }
+            size--;
+            return item;
+        }
     }
 
     @Override
     public boolean isEmpty() {
-        /* TODO: implement it */
-        return false;
+        return head==null;
     }
 
     @Override
     public int size() {
-        /* TODO: implement it */
-        return 0;
+        return size;
     }
 
     @Override
     public Iterator<Item> iterator() {
-        /* TODO: implement it */
-        return null;
+        return new Itr();
+    }
+
+    private class Itr implements Iterator<Item> {
+        Node<Item> currentNode = new Node<>(null,head,null);
+        @Override
+        public boolean hasNext() {
+            return currentNode.next!=null;
+        }
+
+        @Override
+        public Item next() {
+            if (hasNext()) {
+                currentNode = currentNode.next;
+                return currentNode.item;
+            } else {
+                throw new NoSuchElementException();
+            }
+        }
+    }
+
+    private static class Node<Item> {
+        Item item;
+        Node<Item> next;
+        Node<Item> prev;
+
+        public Node(Item item) {
+            this.item = item;
+        }
+
+        public Node(Item item, Node<Item> next, Node<Item> prev) {
+            this.item = item;
+            this.next = next;
+            this.prev = prev;
+        }
     }
 }

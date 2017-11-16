@@ -2,6 +2,7 @@ package seminar1.collections;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArrayStack<Item> implements IStack<Item> {
 
@@ -17,13 +18,17 @@ public class ArrayStack<Item> implements IStack<Item> {
 
     @Override
     public void push(Item item) {
-        /* TODO: implement it */
+        elementData[size]=item;
+        size++;
+        if (size==elementData.length) grow();
     }
 
     @Override
     public Item pop() {
-        /* TODO: implement it */
-        return null;
+        if (isEmpty()) return null;
+        size--;
+        if (size<elementData.length/4) shrink();
+        return elementData[size];
     }
 
     @Override
@@ -37,19 +42,11 @@ public class ArrayStack<Item> implements IStack<Item> {
     }
 
     private void grow() {
-        /**
-         * TODO: implement it
-         * Если массив заполнился,
-         * то увеличить его размер в полтора раз
-         */
+        changeCapacity(((int) (elementData.length * 1.5)));
     }
 
     private void shrink() {
-        /**
-         * TODO: implement it
-         * Если количество элементов в четыре раза меньше,
-         * то уменьшить его размер в два раза
-         */
+        changeCapacity(elementData.length/2);
     }
 
     private void changeCapacity(int newCapacity) {
@@ -72,7 +69,11 @@ public class ArrayStack<Item> implements IStack<Item> {
 
         @Override
         public Item next() {
-            return elementData[--currentPosition];
+            if (hasNext()){
+                return elementData[--currentPosition];
+            } else {
+                throw new NoSuchElementException();
+            }
         }
 
     }

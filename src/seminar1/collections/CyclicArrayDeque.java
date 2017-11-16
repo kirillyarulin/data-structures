@@ -1,64 +1,130 @@
 package seminar1.collections;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class CyclicArrayDeque<Item> implements IDeque<Item> {
 
-    private Item[] elementData;
+    private static final int DEFAULT_CAPACITY = 10;
+
+    @SuppressWarnings("unchecked")
+    private Item[] elementData=(Item[]) new Object[DEFAULT_CAPACITY];
+    private int head=0;
+    private int tail=0;
+    private int size=0;
 
     @Override
     public void pushFront(Item item) {
-        /* TODO: implement it */
+        if (head==0) {
+            head=elementData.length-1;
+        } else {
+            head--;
+        }
+        elementData[head]=item;
+        size++;
+        if (size==elementData.length) grow();
     }
 
     @Override
     public void pushBack(Item item) {
-        /* TODO: implement it */
+        elementData[tail++]=item;
+        size++;
+        if (size==elementData.length) {
+            grow();
+        } else if (tail==elementData.length) {
+            tail = 0;
+        }
     }
 
     @Override
     public Item popFront() {
-        /* TODO: implement it */
-        return null;
+        Item item = elementData[head];
+        elementData[head]=null;
+        size--;
+        if (head==elementData.length-1) {
+            head=0;
+        } else {
+            head++;
+        }
+        if (size<elementData.length/4 && elementData.length>DEFAULT_CAPACITY) shrink();
+        return item;
     }
 
     @Override
     public Item popBack() {
-        /* TODO: implement it */
-        return null;
+        if (tail==0) {
+            tail=elementData.length-1;
+        } else {
+            tail--;
+        }
+        Item item = elementData[tail];
+        elementData[tail]=null;
+        size--;
+        if (size< elementData.length/4 && elementData.length>DEFAULT_CAPACITY) shrink();
+        return item;
     }
 
     @Override
     public boolean isEmpty() {
-        /* TODO: implement it */
-        return false;
+        return size==0;
     }
 
     @Override
     public int size() {
-        /* TODO: implement it */
-        return 0;
+        return size;
     }
 
     private void grow() {
-        /**
-         * TODO: implement it
-         * Если массив заполнился,
-         * то увеличить его размер в полтора раз
-         */
+        changeSize((int)(elementData.length*1.5));
     }
 
     private void shrink() {
-        /**
-         * TODO: implement it
-         * Если количество элементов в четыре раза меньше,
-         * то уменьшить его размер в два раза
-         */
+        changeSize(elementData.length/2);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void changeSize(int newSize) {
+        if (head<tail) {
+            elementData= Arrays.copyOf(Arrays.copyOfRange(elementData,head,tail),newSize);
+        } else {
+            Item[] newArray = (Item[]) new Object[newSize];
+            int i = 0;
+            for (int j = head;j<elementData.length;j++) {
+                newArray[i]=elementData[j];
+                i++;
+            }
+            for (int j = 0; j<tail;j++) {
+                newArray[i]=elementData[j];
+                i++;
+            }
+            elementData=newArray;
+        }
+        head=0;
+        tail=size;
     }
 
     @Override
     public Iterator<Item> iterator() {
-        /* TODO: implement it */
-        return null;
+        return new Itr();
+    }
+
+    private class Itr implements Iterator<Item> {
+        private int currentPosition = head;
+
+        @Override
+        public boolean hasNext() {
+            return currentPosition != tail;
+        }
+
+        @Override
+        public Item next() {
+            Item item = elementData[currentPosition];
+            if (currentPosition == elementData.length - 1) {
+                currentPosition = 0;
+            } else {
+                currentPosition++;
+            }
+            return item;
+        }
     }
 }

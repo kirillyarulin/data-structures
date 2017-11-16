@@ -1,5 +1,8 @@
 package seminar1;
 
+import seminar1.collections.IStack;
+import seminar1.collections.LinkedStack;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,18 +17,22 @@ import java.io.InputStreamReader;
 public class Solver {
 
     private static final String QUIT = "q";
+    static private Node root = new Node();
+    static private IStack<Node> stack = new LinkedStack<>();
+    static private String[] tokens;
+    static private int it = 0;
 
-    private static final char LEFT_PAREN   = '(';
-    private static final char RIGHT_PAREN  = ')';
-    private static final char PLUS         = '+';
-    private static final char MINUS        = '-';
-    private static final char TIMES        = '*';
-    private static final char DIVISION     = '/';
+    private static final String LEFT_PAREN   = "(";
+    private static final String RIGHT_PAREN  = ")";
+    private static final String PLUS         = "+";
+    private static final String MINUS        = "-";
+    private static final String TIMES        = "*";
+    private static final String DIVISION     = "/";
 
     private static double evaluate(String[] values) {
-        /* TODO: implement it */
-        // Double.valueOf(values[i])
-        return 0D;
+        tokens=values;
+        infix(root);
+        return result(root);
     }
 
     public static void main(String[] args) {
@@ -38,4 +45,59 @@ public class Solver {
             e.printStackTrace();
         }
     }
+
+    private static void infix(Node nd) {
+        if (hasNextToken()) {
+            String str = readToken();
+            if (str.equals(LEFT_PAREN)) {
+                nd.leftChild = new Node();
+                infix(nd.leftChild);
+                nd.data=readToken(); //читаем символ операции
+                nd.rightChild = new Node();
+                infix(nd.rightChild);
+                readToken(); //читаем закрывающую скобку
+            } else {
+                nd.data=str; //записываем в вершину операнд
+            }
+        }
+    }
+
+    private static String readToken() {
+        if (hasNextToken()) {
+            it++;
+            return tokens[it - 1];
+        } else {
+            return null;
+        }
+    }
+
+    private static boolean hasNextToken() { return it<tokens.length; }
+
+    private static double result(Node nd) {
+        switch (nd.data) {
+            case TIMES:
+                return result(nd.leftChild) * result(nd.rightChild);
+            case DIVISION:
+                return result(nd.leftChild) / result(nd.rightChild);
+            case PLUS:
+                return result(nd.leftChild) + result(nd.rightChild);
+            case MINUS:
+                return result(nd.leftChild) - result(nd.rightChild);
+            default:
+                return Double.parseDouble(nd.data);
+        }
+    }
+
+
+    private static class Node {
+        String data;
+        Node leftChild;
+        Node rightChild;
+
+        Node() {}
+        Node(String data) {
+            this.data=data;
+        }
+    }
+
 }
