@@ -55,18 +55,19 @@ public class LinkedQueue<Item> implements IQueue<Item> {
     }
 
     private class LinkedQueueIterator implements Iterator<Item> {
-        Node<Item> currentPosition = new Node<Item>(null,head);
+        Node<Item> currentPosition = head;
 
         @Override
         public boolean hasNext() {
-           return currentPosition.next!=null;
+           return currentPosition != null;
         }
 
         @Override
         public Item next() {
             if (hasNext()) {
+                Item t = currentPosition.item;
                 currentPosition = currentPosition.next;
-                return currentPosition.item;
+                return t;
             } else {
                 throw new NoSuchElementException();
             }

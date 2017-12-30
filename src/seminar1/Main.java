@@ -46,21 +46,21 @@ public class Main {
 //
 //        System.out.println();
 //-------------------------------------------------------
-//        System.out.println("LinkedQueue");
-//        IQueue<Integer> queue = new LinkedQueue<>();
-//        for (int i = 0; i < 20; i++) {
-//            queue.enqueue(i);
-//        }
-//        for (int i : queue) {
-//            System.out.print(i + " ");
-//        }
-//        System.out.println();
-//        for (int i = 0; i < 30; i++) {
-//            System.out.print(queue.dequeue() + " ");
-//        }
-//        System.out.println();
-//
-//        System.out.println();
+/*        System.out.println("LinkedQueue");
+        IQueue<Integer> queue = new LinkedQueue<>();
+        for (int i = 0; i < 100; i++) {
+            queue.enqueue(i);
+        }
+        for (int i : queue) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < 102; i++) {
+            System.out.print(queue.dequeue() + " ");
+        }
+        System.out.println();
+
+        System.out.println();*/
 ////-------------------------------------------------------
 //        System.out.println("TwoStackQueue");
 //        IQueue<Integer> queue2 = new TwoStackQueue<>();
@@ -74,12 +74,12 @@ public class Main {
 //        for (int i = 0; i < 30; i++) {
 //            System.out.print(queue2.dequeue() + " ");
 //        }
-//-------------------------------------------------------
-//        System.out.println("LinkDeque");
-//        IDeque<Integer> dec = new LinkedDeque<>() ;
-//        for (int i = 0;i< 5;i++) {
+////-------------------------------------------------------
+//        System.out.println("CyclicArrayDeque");
+//        IDeque<Integer> dec = new CyclicArrayDeque<>() ;
+//        for (int i = 0;i < 100;i++) {
 //            dec.pushFront(i);
-//            dec.pushBack(i);
+//            dec.pushBack(-i);
 //        }
 //
 //        for (Integer x : dec) {
@@ -87,7 +87,7 @@ public class Main {
 //        }
 //        System.out.println();
 //        System.out.println();
-//        for (int i = 0;i<15;i++) {
+//        for (int i = 0;i<102;i++) {
 //            System.out.print(dec.popFront() + " ");
 //            System.out.print(dec.popBack() + " ");
 //        }
@@ -108,16 +108,29 @@ public class Main {
 //        }
 //        System.out.println();
 // -----------------------------------------------------------------
-//        PeekingIncreasingIterator increasingIterator1 = new PeekingIncreasingIterator(5,5,15);
-//        PeekingIncreasingIterator increasingIterator2 = new PeekingIncreasingIterator(5,10,15);
-//        PeekingIncreasingIterator increasingIterator3 = new PeekingIncreasingIterator(40,40,15);
+//        PeekingIncreasingIterator peekingIncreasingIterator1 = new PeekingIncreasingIterator(5,5,15);
+//        PeekingIncreasingIterator peekingIncreasingIterator2 = new PeekingIncreasingIterator(5,10,15);
+//        PeekingIncreasingIterator peekingIncreasingIterator3 = new PeekingIncreasingIterator(40,40,15);
 //
-//        MergingPeekingIncreasingIterator m = new MergingPeekingIncreasingIterator(increasingIterator1,increasingIterator2,increasingIterator3);
 //
-//        System.out.println();
+//        MergingPeekingIncreasingIterator m = new MergingPeekingIncreasingIterator(peekingIncreasingIterator1,peekingIncreasingIterator2,peekingIncreasingIterator3);
+//
 //        while (m.hasNext()) {
 //            System.out.print(m.next() + " ");
 //        }
+// -----------------------------------------------------------------
+/*        IncreasingIterator increasingIterator1 = new IncreasingIterator(5,20,3);
+        IncreasingIterator increasingIterator2 = new IncreasingIterator(5,10,2);
+
+        *//*while (increasingIterator1.hasNext()) System.out.print(increasingIterator1.next() + " ");
+        System.out.println();
+        while (increasingIterator2.hasNext()) System.out.print(increasingIterator2.next() + " ");*//*
+
+        MergingIncreasingIterator m = new MergingIncreasingIterator(increasingIterator1,increasingIterator2);
+        while (m.hasNext()) {
+            System.out.print(m.next() + " ");
+        }*/
+
 
 
     }

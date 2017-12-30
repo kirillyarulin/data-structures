@@ -25,19 +25,12 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
         this.comparator = comparator;
     }
 
-    @SuppressWarnings("unchecked")
-    private ArrayPriorityQueue(ArrayPriorityQueue queue) {
-        this.elementData = (Key[]) new Comparable[queue.size];
-        for (int i = 0;i<elementData.length;i++) {
-            this.elementData[i]=(Key)queue.elementData[i];
-        }
-        this.comparator = (Comparator<Key>) queue.comparator;
-        this.size = queue.size();
-    }
 
     @Override
     public void add(Key key) {
-        if (size == elementData.length) grow();
+        if (size == elementData.length) {
+            grow();
+        }
         elementData[size] = key;
         size++;
         siftUp();
@@ -50,10 +43,14 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
 
     @Override
     public Key extractMin() {
-        if (isEmpty()) return null;
+        if (isEmpty()) {
+            return null;
+        }
         Key minElement = elementData[0];
         elementData[0] = elementData[--size];
-        if (size() < elementData.length / 4) shrink();
+        if (size() < elementData.length / 4) {
+            shrink();
+        }
         siftDown();
         return minElement;
     }
@@ -72,9 +69,11 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
         int i = size - 1;
 
         while (true) {
-            if (i > 0 && greater((i - 1) / 2, i)) {
-                swap(i, (i - 1) / 2);
-                i = (i - 1) / 2;
+            int parent = (i - 1) / 2;
+
+            if (i > 0 && greater(parent, i)) {
+                swap(i, parent);
+                i = parent;
             } else {
                 break;
             }
@@ -85,9 +84,19 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
         int i = 0;
         int min = i;
 
+
         while (true) {
-            if (2 * i + 1 < size && greater(min, 2 * i + 1)) min = 2 * i + 1;
-            if (2 * i + 2 < size && greater(min, 2 * i + 2)) min = 2 * i + 2;
+            int leftChild = 2 * i + 1;
+            int rightChild = 2 * i + 2;
+
+            if (leftChild < size && greater(min, leftChild)) {
+                min = leftChild;
+            }
+
+            if (rightChild < size && greater(min, rightChild)) {
+                min = rightChild;
+            }
+
             if (min != i) {
                 swap(i, min);
                 i = min;
@@ -126,21 +135,17 @@ public class ArrayPriorityQueue<Key extends Comparable<Key>> implements IPriorit
     }
 
     private class Itr implements Iterator<Key> {
-        IPriorityQueue<Key> dupQueue;
-
-        public Itr() {
-            dupQueue = new ArrayPriorityQueue<>(ArrayPriorityQueue.this);
-        }
+        int i = 0;
 
         @Override
         public boolean hasNext() {
-            return !dupQueue.isEmpty();
+            return i < size;
         }
 
         @Override
         public Key next() {
             if (hasNext()) {
-                return dupQueue.extractMin();
+                return elementData[i++];
             } else {
                 throw new NoSuchElementException();
             }

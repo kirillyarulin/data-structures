@@ -20,26 +20,31 @@ public class MergingPeekingIncreasingIterator implements Iterator<Integer> {
 
     private Comparator<PeekingIncreasingIterator> comparator = (p1, p2) -> p1.peek().compareTo(p2.peek());
 
-    private ArrayPriorityQueue<Integer> priorityQueue = new ArrayPriorityQueue<Integer>();
+    private ArrayPriorityQueue<PeekingIncreasingIterator> priorityQueue = new ArrayPriorityQueue<>(comparator);
 
 
     public MergingPeekingIncreasingIterator(IPeekingIterator... peekingIterator) {
-        for (int i = 0; i < peekingIterator.length; i++) {
-            while (peekingIterator[i].hasNext()) priorityQueue.add((Integer) peekingIterator[i].next());
+        for (IPeekingIterator x : peekingIterator){
+            priorityQueue.add((PeekingIncreasingIterator) x);
         }
     }
 
     @Override
     public boolean hasNext() {
-        return !priorityQueue.isEmpty();
+        return priorityQueue.size()>0;
     }
 
     @Override
     public Integer next() {
-        if (hasNext()){
-            return priorityQueue.extractMin();
+        if (hasNext()) {
+            Integer t = priorityQueue.peek().next();
+            if (!priorityQueue.peek().hasNext()) {
+                priorityQueue.extractMin();
+            }
+            return t;
         } else {
             throw new NoSuchElementException();
         }
+
     }
 }

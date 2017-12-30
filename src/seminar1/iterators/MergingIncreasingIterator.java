@@ -22,12 +22,10 @@ public class MergingIncreasingIterator implements Iterator<Integer> {
     public MergingIncreasingIterator(IncreasingIterator first, IncreasingIterator second) {
         this.first = first;
         this.second = second;
-        /* TODO: implement it */
     }
 
     @Override
     public boolean hasNext() {
-        //todo imp
         return first.hasNext() || second.hasNext();
     }
 
@@ -37,8 +35,17 @@ public class MergingIncreasingIterator implements Iterator<Integer> {
             if (firstNum == null && first.hasNext()) firstNum = first.next();
             if (secondNum == null && second.hasNext()) secondNum = second.next();
 
-            if (firstNum == null) return second.next();
-            if (secondNum == null) return first.next();
+            Integer t;
+            if (firstNum == null) {
+                t = secondNum;
+                secondNum = null;
+                return t;
+            }
+            if (secondNum == null) {
+                t = firstNum;
+                firstNum = null;
+                return t;
+            }
 
             int minNum;
 

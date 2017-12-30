@@ -25,19 +25,22 @@ public class ParenthesesSequence {
     // sequence = "()()" | "((((" | ")()(" | ...
     private static boolean isBalanced(String sequence) {
         if (sequence.length() == 0) return true;
-        IStack<Character> stack = new LinkedStack<>();
-        for (char x : sequence.toCharArray()) {
-            if (x == LEFT_PAREN) {
-                stack.push(x);
-            } else if (x == RIGHT_PAREN) {
-                if (stack.isEmpty()) {
-                    return false;
-                } else {
-                    if (!stack.pop().equals(LEFT_PAREN)) return false;
-                }
+        int level = 0;
+        for (int i = 0; i < sequence.length();i++) {
+            char currentSymbol = sequence.charAt(i);
+
+            if (currentSymbol == LEFT_PAREN) {
+                level++;
+            } else if (currentSymbol == RIGHT_PAREN) {
+                level--;
+            }
+
+            if (level<0) {
+                break;
             }
         }
-        return stack.isEmpty();
+
+        return level == 0;
     }
 
     public static void main(String[] args) {

@@ -43,7 +43,7 @@ public class LinkedStack<Item> implements IStack<Item> {
 
         @Override
         public boolean hasNext() {
-            return currentNode.next!=(null);
+            return currentNode.next != null;
         }
 
         @Override

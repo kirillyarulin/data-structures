@@ -28,7 +28,7 @@ public class CyclicArrayQueue<Item> implements IQueue<Item> {
 
     @Override
     public Item dequeue() {
-
+        if (size == 0) { return null; }
         Item item = elementData[head];
         elementData[head]=null;
         size--;
@@ -62,21 +62,16 @@ public class CyclicArrayQueue<Item> implements IQueue<Item> {
 
     @SuppressWarnings("unchecked")
     private void changeSize(int newSize) {
+        Item[] newArray = (Item[]) new Object[newSize];
+        int i = 0;
+
         if (head<tail) {
-            elementData=Arrays.copyOf(Arrays.copyOfRange(elementData,head,tail),newSize);
+            System.arraycopy(elementData,head,newArray,0,size);
         } else {
-            Item[] newArray = (Item[]) new Object[newSize];
-            int i = 0;
-            for (int j = head;j<elementData.length;j++) {
-                newArray[i]=elementData[j];
-                i++;
-            }
-            for (int j = 0; j<tail;j++) {
-                newArray[i]=elementData[j];
-                i++;
-            }
-            elementData=newArray;
+            System.arraycopy(elementData,head,newArray,0,elementData.length-head);
+            System.arraycopy(elementData,0,newArray,elementData.length-head,tail);
         }
+        elementData=newArray;
         head=0;
         tail=size;
     }

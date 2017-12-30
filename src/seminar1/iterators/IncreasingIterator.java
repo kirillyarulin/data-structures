@@ -43,4 +43,5 @@ public class IncreasingIterator implements Iterator<Integer> {
     public String getName() {
         return name;
     }
+
 }

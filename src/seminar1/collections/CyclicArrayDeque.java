@@ -22,7 +22,9 @@ public class CyclicArrayDeque<Item> implements IDeque<Item> {
         }
         elementData[head]=item;
         size++;
-        if (size==elementData.length) grow();
+        if (size==elementData.length) {
+            grow();
+        }
     }
 
     @Override
@@ -46,7 +48,9 @@ public class CyclicArrayDeque<Item> implements IDeque<Item> {
         } else {
             head++;
         }
-        if (size<elementData.length/4 && elementData.length>DEFAULT_CAPACITY) shrink();
+        if (size<elementData.length/4 && elementData.length/4>DEFAULT_CAPACITY) {
+            shrink();
+        }
         return item;
     }
 
@@ -60,7 +64,7 @@ public class CyclicArrayDeque<Item> implements IDeque<Item> {
         Item item = elementData[tail];
         elementData[tail]=null;
         size--;
-        if (size< elementData.length/4 && elementData.length>DEFAULT_CAPACITY) shrink();
+        if (size< elementData.length/4 && elementData.length/4>DEFAULT_CAPACITY) shrink();
         return item;
     }
 
@@ -84,21 +88,16 @@ public class CyclicArrayDeque<Item> implements IDeque<Item> {
 
     @SuppressWarnings("unchecked")
     private void changeSize(int newSize) {
+        Item[] newArray = (Item[]) new Object[newSize];
+        int i = 0;
+
         if (head<tail) {
-            elementData= Arrays.copyOf(Arrays.copyOfRange(elementData,head,tail),newSize);
+            System.arraycopy(elementData,head,newArray,0,size);
         } else {
-            Item[] newArray = (Item[]) new Object[newSize];
-            int i = 0;
-            for (int j = head;j<elementData.length;j++) {
-                newArray[i]=elementData[j];
-                i++;
-            }
-            for (int j = 0; j<tail;j++) {
-                newArray[i]=elementData[j];
-                i++;
-            }
-            elementData=newArray;
+            System.arraycopy(elementData,head,newArray,0,elementData.length-head);
+            System.arraycopy(elementData,0,newArray,elementData.length-head,tail);
         }
+        elementData=newArray;
         head=0;
         tail=size;
     }
